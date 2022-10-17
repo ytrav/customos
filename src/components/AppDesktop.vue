@@ -1,6 +1,6 @@
 <template>
 
-    <div>
+    <div @mousedown="$emit('deskClick')">
         <VueSelecto :selectByClick="true" :selectFromInside="true" :continueSelect="false"
             :toggleContinueSelect='"shift"' :hitRate="100" @select="onSelect" />
     </div>

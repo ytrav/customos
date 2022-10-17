@@ -1,19 +1,19 @@
 <template>
     <footer>
         <div id="taskbar-icons">
-            <div title="Start Menu" class="start-menu">
+            <div @mousedown="$emit('deskClick')" title="Start Menu" class="start-menu">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
                 </svg>
             </div>
-            <div class="taskbar-icon" v-for="(app, index) in apps" :key="index" :title="app.title"
+            <div @mousedown="$emit('deskClick')" class="taskbar-icon" v-for="(app, index) in apps" :key="index" :title="app.title"
                 @click="toggleApp(app.appName, app.isOpen, app.isHidden)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path :d="app.svgPath" />
                 </svg>
             </div>
         </div>
-        <div id="control-panel"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <div @mousedown="$emit('deskClick')" id="control-panel"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
                     d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
             </svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -100,6 +100,10 @@ export default {
                         this.$emit('open', 1);
                         console.log('open text');
                         break;
+                    case 'settings':
+                        this.$emit('open', 2);
+                        console.log('open settings');
+                        break;
                     default:
                         console.log('unknown value');
                         break;
@@ -117,6 +121,10 @@ export default {
                         this.$emit('hide', 1);
                         console.log('hide text');
                         break;
+                    case 'settings':
+                        this.$emit('hide', 2);
+                        console.log('hide settings');
+                        break;
                     default:
                         console.log('unknown value');
                         break;
@@ -133,6 +141,10 @@ export default {
                     case 'text':
                         this.$emit('show', 1);
                         console.log('show text');
+                        break;
+                    case 'settings':
+                        this.$emit('show', 2);
+                        console.log('show settings');
                         break;
                     default:
                         console.log('unknown value');
