@@ -1,9 +1,10 @@
 <template>
   <div id="app" @mousemove="mouseMoved($event)">
+    <!-- <div @mousedown="hideInput" v-if="inputTriggerVisible" id="inputCloseTrigger"></div> -->
     <transition @contextmenu.prevent="handler" name="context">
-      <AppContextMenu @contextmenu.native="nothing" v-show="contextVisible" />
+      <AppContextMenu @newFile="newFile" @contextmenu.native="nothing" v-show="contextVisible" />
     </transition>
-    <AppDesktop @deskClick="hideContext" @click="hideContext" @contextmenu.native="handler($event)" />
+    <AppDesktop :inputTriggerVisible="inputTriggerVisible" @trigger-hide-input="hideInput" @show-input="showInput($event)" :icons="icons" @deskClick="hideContext" @click="hideContext" @contextmenu.native="handler($event)" />
     <modal :class="{ focused: app.inFocus}" :transition="app.transition" :id="'modal-'+index"
       styles="pointer-events: auto; border-radius: 15px;" v-for="(app, index) in taskbarApps" :key="index"
       :name="app.appName" :focusTrap="false" :minWidth="400" :minHeight="200" draggable=".window-header"
@@ -32,8 +33,8 @@
       </header>
       <div @mousedown="focus(index)" class="content">{{ app.content }}</div>
     </modal>
-    <AppTaskbar @deskClick="hideContext" @mousedown="hideContext" @contextmenu.native="nothing" :apps="taskbarApps" @open="open($event)"
-      @hide="hide($event)" @show="show($event)" />
+    <AppTaskbar @deskClick="hideContext" @mousedown="hideContext" @contextmenu.native="nothing" :apps="taskbarApps"
+      @open="open($event)" @hide="hide($event)" @show="show($event)" />
 
   </div>
 
@@ -50,10 +51,34 @@ export default {
   data() {
     return {
       document: 'document',
+      buffer: '',
       hidden: false,
       cursorX: 0,
       cursorY: 0,
       contextVisible: false,
+      inputTriggerVisible: false,
+      icons: [
+        {
+          name: 'testfile',
+          ext: 'txt',
+          img: '',
+          inputVisible: false,
+        },
+        {
+          name: 'testfile2',
+          ext: 'txt',
+          img: '',
+          inputVisible: false,
+
+        },
+        {
+          name: 'testfile3',
+          ext: 'txt',
+          img: '',
+          inputVisible: false,
+
+        },
+      ],
       taskbarApps: [
         {
           title: 'Calculator',
@@ -97,6 +122,24 @@ export default {
     AppContextMenu
   },
   methods: {
+    newFile() {
+      this.icons.push({
+        name: 'newfile',
+        ext: 'txt',
+        img: '',
+        inputVisible: false,
+      })
+      this.hideContext();
+    },
+    showInput(idx) {
+      this.buffer = idx;
+      this.icons[idx]['inputVisible'] = true;
+
+    },
+    hideInput() {
+      this.icons[this.buffer]['inputVisible'] = false;
+
+    },
     nothing: function (e) {
       e.preventDefault();
     },
@@ -117,6 +160,7 @@ export default {
       // alert(`yer mouse coordinates are X${this.cursorX} and Y${this.cursorY}`);
     },
     hideContext() {
+      this.icons[this.buffer]['inputVisible'] = false;
       if (this.contextVisible === true) {
         this.contextVisible = false;
         // document.getElementById('contextmenu').style.opacity = 0;
@@ -268,6 +312,7 @@ export default {
   padding: 0;
   font-family: 'Inter Tight', sans-serif;
   // box-sizing: border-box;
+  // border: 1px solid rgba(255, 0, 0, 0.59);
 }
 
 .context-enter-active {
@@ -323,6 +368,16 @@ html body .vm--container {
   z-index: 2;
 }
 
+#inputCloseTrigger {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.282);
+    z-index: 40;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap');
 
 // .vm--overlay {
@@ -339,9 +394,12 @@ html body .vm--container {
 }
 
 html {
-  background-image: url(./assets/wallpaper2.jpg);
+  background-image: url(./assets/wallpaper.jpg);
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   overflow-y: hidden;
+  height: 100%;
 }
 
 html body div.vm--container.focused {

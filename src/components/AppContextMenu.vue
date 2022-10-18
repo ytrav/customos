@@ -2,7 +2,7 @@
     <div id="contextmenu" style="top: -300px; left: 0;">
         <span>Sort</span>
         <span @click="reloadPage">Refresh</span>
-        <span>New File</span>
+        <span @click="$emit('newFile')">New File</span>
         <span>New Folder</span>
         <span>Change Wallpaper</span>
     </div>
@@ -13,7 +13,7 @@ export default {
     methods: {
         reloadPage() {
             window.location.reload();
-        }
+        },
     }
 }
 </script>
