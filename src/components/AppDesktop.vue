@@ -2,7 +2,7 @@
     <div id="desktop" @mousedown="$emit('deskClick')">
         <!-- <div @mousedown="$emit('trigger-hide-input')" v-if="inputTriggerVisible" id="inputCloseTrigger"></div> -->
         <VueSelecto :selectByClick="true" :selectFromInside="true" :continueSelect="false"
-            :toggleContinueSelect='"ctrl"' :selectableTargets="['.selecto-area .icon']" :hitRate="20" :ratio="0"
+            :toggleContinueSelect='"ctrl"' :selectableTargets="['.selecto-area .icon']" :hitRate="0" :ratio="0"
             @select="onSelect" />
         <div class="elements selecto-area">
             <article class="icon" v-for="(icon, idx) in icons" :key="idx" :title="icon.name">
@@ -96,6 +96,9 @@ article {
         word-break: break-all;
         // mix-blend-mode: exclusion;
         color: #fff;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
         text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4),
             0px 8px 13px rgba(0, 0, 0, 0.1),
             0px 18px 23px rgba(0, 0, 0, 0.1);
@@ -134,7 +137,7 @@ article {
     border-radius: 2px;
     border: 1px solid #52959F;
     background: #83b8c463;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(2px);
     // transition: transform 0.1s;
 }
 </style>

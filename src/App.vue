@@ -4,7 +4,9 @@
     <transition @contextmenu.prevent="handler" name="context">
       <AppContextMenu @newFile="newFile" @contextmenu.native="nothing" v-show="contextVisible" />
     </transition>
-    <AppDesktop :inputTriggerVisible="inputTriggerVisible" @trigger-hide-input="hideInput" @show-input="showInput($event)" :icons="icons" @deskClick="hideContext" @click="hideContext" @contextmenu.native="handler($event)" />
+    <AppDesktop :inputTriggerVisible="inputTriggerVisible" @trigger-hide-input="hideInput"
+      @show-input="showInput($event)" :icons="icons" @deskClick="hideContext" @click="hideContext"
+      @contextmenu.native="handler($event)" />
     <modal :class="{ focused: app.inFocus}" :transition="app.transition" :id="'modal-'+index"
       styles="pointer-events: auto; border-radius: 15px;" v-for="(app, index) in taskbarApps" :key="index"
       :name="app.appName" :focusTrap="false" :minWidth="400" :minHeight="200" draggable=".window-header"
@@ -51,7 +53,7 @@ export default {
   data() {
     return {
       document: 'document',
-      buffer: '',
+      buffer: 0,
       hidden: false,
       cursorX: 0,
       cursorY: 0,
@@ -121,6 +123,12 @@ export default {
     AppDesktop,
     AppContextMenu
   },
+  // created() {
+  //   this.cursorX = event.clientX;
+  //   this.cursorY = event.clientY;
+  //   document.getElementById('contextmenu').style.left = this.cursorX;
+  //   document.getElementById('contextmenu').style.top = this.cursorY;
+  // },
   methods: {
     newFile() {
       this.icons.push({
@@ -160,7 +168,9 @@ export default {
       // alert(`yer mouse coordinates are X${this.cursorX} and Y${this.cursorY}`);
     },
     hideContext() {
-      this.icons[this.buffer]['inputVisible'] = false;
+      if (this.icons[this.buffer]['inputVisible'] === true) {
+        this.icons[this.buffer]['inputVisible'] = false;
+      }
       if (this.contextVisible === true) {
         this.contextVisible = false;
         // document.getElementById('contextmenu').style.opacity = 0;
@@ -369,13 +379,13 @@ html body .vm--container {
 }
 
 #inputCloseTrigger {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.282);
-    z-index: 40;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.282);
+  z-index: 40;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap');
